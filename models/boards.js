@@ -279,7 +279,14 @@ Boards.mutations({
 
 if (Meteor.isServer) {
   Boards.allow({
-    insert: Meteor.userId,
+    insert: function(userId, doc){
+	var attempedUser = Meteor.user();
+	var userEmailAddress = attempedUser.emails[0].address;
+	if(userEmailAddress && userEmailAddress === 'hesap@bmo.org.tr') {
+	    return true;
+	}
+	return false;
+    },
     update: allowIsBoardAdmin,
     remove: allowIsBoardAdmin,
     fetch: ['members'],
